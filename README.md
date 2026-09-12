@@ -27,6 +27,11 @@ voxel diff.
 
 ## Before / after (same photos, same prompt, harness added)
 
+| plain GPT-6 Astra | Astra + harness (after three in-game `!fix` turns) |
+|---|---|
+| ![plain Astra](docs/images/plain_astra.png) | ![with harness](docs/images/with_harness.png) |
+
+
 | | plain Astra | Astra + harness |
 |---|---|---|
 | prompt | `experiments/plain_astra/prompt_v1.md` | `experiments/harness_astra/prompt_v2.md` (v1 + "read AGENTS.md and DSL_REFERENCE.md, write with the DSL") |
