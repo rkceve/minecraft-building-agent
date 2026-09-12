@@ -60,18 +60,49 @@ Minecraft chat  --ssh tail-->  bridge.py  --codex exec (GPT-6 Astra)-->  edits b
 - `mcbuild/litematic.py`, `ascii.py` — reading the reference schematic, ASCII elevations used both by
   humans and by Astra to check its own work.
 
-## Running it
+## Running it from a clean clone
 
-Server: Paper 1.21.8, flat world with ground at y=0, RCON enabled, creative. Fill `mcbuild/server.toml`.
+What is in this repository is enough for the harness itself: the DSL, the techniques, the cathedral
+window stamp (`catalog/cathedral_stamps.json`, an 11 x 26 x 4 excerpt of the reference cathedral),
+the preview/apply/bridge tooling and the tests.
 
 ```
 pip install nbtlib numpy pytest ruff
-python -m pytest -q                      # 107+ tests, no server needed
-python -m mcbuild.runner --deploy        # copy rcon_batch.py to the server box
-python -m mcbuild.preview tests/fixtures/chapel.py --faces n,e
+python -m pytest -q                                          # 113 tests, no server or model needed
+python -m mcbuild.preview tests/fixtures/chapel.py --faces n,e   # ASCII elevations of a sample chapel
+python -m mcbuild.preview builds/church_v0/build.py --faces n,e  # the Astra-written church
+```
+
+Two of the stamp tests are skipped unless the full reference schematic is present (it is the builder's
+private asset and is not published); everything else runs.
+
+To run the live loop you need three things that are not in the repository:
+
+1. **A Minecraft server**: Paper 1.21.8 (Java 21+), creative, flat world whose grass surface is at y=0
+   (the `generator-settings` preset in `docs/server_requirements.md`), `enable-rcon=true`, and a box you
+   can reach over ssh with `python3` on it. Disable Paper's bundled spark profiler if you run Java 26
+   (it crashes the JVM). Fill `mcbuild/server.toml`: `ssh_host`, `remote_dir`, `rcon_port`,
+   `password_file` (RCON password on the server box), `log_path` (Paper's `logs/latest.log`).
+   Then `python -m mcbuild.runner --deploy` copies `rcon_batch.py` to the box and
+   `python -m mcbuild.runner --one list` checks the round trip.
+2. **Codex CLI 0.153+ logged in to ChatGPT** (`codex login`), with access to the `gpt-6-astra` model.
+   Set `CODEX_BIN` if the binary is not on PATH. No OpenAI API key is used. Astra runs under
+   `workspace-write` sandboxing and must be able to run Python for its own previews; adjust the
+   interpreter path in `mcbuild/prompts/turn_prefix.txt` to your machine.
+3. **A player**: the whitelisted account that types in chat. The bridge reads the player's position and
+   view direction with `data get entity <name>`.
+
+Start the loop:
+```
 python -m mcbuild.bridge --build-id church --rate 60
 ```
-Then in game: `!build a small gothic church`, `!fix make the spires taller`, `!undo`.
+Then in game: `!build a small gothic church`, `!fix make the spires taller` (while looking at one),
+`!status`, `!cancel`, `!undo` (restores the site to before the first build). Each turn is logged to
+`builds/<id>/logs/turn_<n>.jsonl`; a single turn can be reverted by reverse-applying its patch to
+`builds/<id>/build.py` and re-running `python -m mcbuild.preview ... --json` + `python -m mcbuild.apply`.
+
+To reproduce the before/after experiment you also need the six reference photos (any photos of the
+Old Catholic Shimizu Church) placed in `refs/shimizu/` and passed to `codex exec -i`.
 
 ## Honest notes
 

@@ -1,11 +1,19 @@
 from __future__ import annotations
 
+import pytest
+
 from mcbuild import stamps as st
 from mcbuild.ascii import elevation
 from mcbuild.litematic import load_voxels
 from mcbuild.techniques import AIR, Frame
 
 
+needs_schematic = pytest.mark.skipif(
+    not st.CATHEDRAL_PATH.exists(), reason="private reference schematic not present"
+)
+
+
+@needs_schematic
 def test_extract_and_place_round_trips_on_north_frame() -> None:
     vox = load_voxels(st.CATHEDRAL_PATH)
     x0, y0, z0, x1, y1, z1 = st.WINDOW_BAY_BOX
@@ -16,6 +24,7 @@ def test_extract_and_place_round_trips_on_north_frame() -> None:
     assert placed == original
 
 
+@needs_schematic
 def test_place_on_east_frame_and_back_matches_original_multiset() -> None:
     vox = load_voxels(st.CATHEDRAL_PATH)
     x0, y0, z0, x1, y1, z1 = st.WINDOW_BAY_BOX
