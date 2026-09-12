@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a0964c-9a90-7910-870d-0f668cab6085"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"bridge ok"}}
+{"type":"turn.completed","usage":{"input_tokens":16917,"cached_input_tokens":13056,"cache_write_input_tokens":0,"output_tokens":6,"reasoning_output_tokens":0}}

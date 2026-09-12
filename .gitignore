@@ -1,0 +1,15 @@
+.env
+__pycache__/
+.ruff_cache/
+.pytest_cache/
+state/
+builds/*/logs/
+builds/*/out.json
+bridge.log
+bridge_stdout.log
+*.pyc
+refs/*.litematic
+refs/shimizu/
+catalog/*.json
+experiments/*/run_*.log
+builds/*/build_turn*.py

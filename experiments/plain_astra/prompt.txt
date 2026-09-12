@@ -1,0 +1,11 @@
+Write a single Python 3.12 file named church_plain.py in the current directory (stdlib only).
+It must define `def build() -> dict[tuple[int,int,int], str]` returning a voxel dictionary
+{(x, y, z): "block_name[prop=val,...]"} for a SMALL Gothic-style church in Minecraft 1.21.8
+(Java Edition block ids without the "minecraft:" prefix, with correct block-state properties
+for stairs (facing/half/shape), slabs (type), walls, fences, logs (axis)).
+Constraints: ground is y=0 (place the floor at y=1); footprint at most 24 x 40 blocks; height at most 30;
+origin at (0,1,0); use a Gothic palette (stone_bricks, deepslate_bricks, calcite or polished_diorite,
+dark_oak, glass or stained glass, lanterns). Include: a nave with a gable roof made of stairs, pointed-arch
+windows, buttresses, a small bell tower, an entrance door. Do your best to make it look like a build by an
+experienced Minecraft builder. Also add `if __name__ == "__main__": print(len(build()))`.
+Do not write any other files. Do not explain; just write the file and run it once to confirm it executes.

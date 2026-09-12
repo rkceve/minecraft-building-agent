@@ -1,0 +1,5 @@
+ssh_host = "claude@minecraft-server"
+remote_dir = "~/buildagent-server"
+rcon_port = 25576
+password_file = "~/buildagent-server/.rcon-password"
+log_path = "~/buildagent-server/logs/latest.log"
